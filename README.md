@@ -12,3 +12,5 @@ This app allows you to save notes in Core Data.
 ## Requirements
 
 Xcode 13 Swift 5
+
+### UNDER DEVELOPMENT
