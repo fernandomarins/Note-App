@@ -12,36 +12,25 @@ import CoreData
 
 class NoteTableView: UITableViewController {
     
-    var firstLoad = true
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
         loadData()
-        
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         loadData()
         tableView.reloadData()
     }
     
     func loadData() {
-        if firstLoad {
-            firstLoad = false
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            let context: NSManagedObjectContext = appDelegate.persistentContainer.viewContext
-            let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Note")
-            
-            do {
-                let results: NSArray = try context.fetch(request) as NSArray
-                for result in results {
-                    let note = result as! Note
-                    noteList.append(note)
-                }
-            } catch {
-                print(error)
-            }
+        let request = Note.fetchRequest()
+        do {
+            noteList = try context.fetch(request) as! [Note]
+        } catch {
+            print(error)
         }
     }
 
