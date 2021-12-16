@@ -61,7 +61,6 @@ class NoteTableView: UITableViewController {
             let selectedNote: Note!
             selectedNote = noteList[indexPath.row]
             noteDetail?.selectedNote = selectedNote
-            noteDetail?.positionNote = indexPath.row
             print(indexPath.row)
             
             tableView.deselectRow(at: tableView.indexPathForSelectedRow!, animated: true)
