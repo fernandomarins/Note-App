@@ -78,6 +78,7 @@ class NoteDetailVC: UIViewController {
     
     
     @IBAction func deleteAction(_ sender: Any) {
+        
         let request = Note.fetchRequest()
         
         do {
