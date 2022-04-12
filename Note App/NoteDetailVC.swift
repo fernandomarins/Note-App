@@ -52,25 +52,20 @@ class NoteDetailVC: UIViewController {
                 print(error)
             }
         } else {
-            // Editing a note
-            let request = Note.fetchRequest()
             
-            do {
-                let results: NSArray = try context.fetch(request) as NSArray
-                for result in results {
-                    let note = result as! Note
-                    // Searching for the correct note to update
-                    if note == selectedNote {
-                        note.title = titleTextField.text
-                        note.desc = descriptionTextView.text
-                        
-                        // Always save the context
-                        try context.save()
-                        navigationController?.popViewController(animated: true)
-                    }
-                }
-            } catch {
-                print(error)
+            let note = returnObject()
+            
+            guard let note = note else {
+                return
+            }
+            
+            if note == selectedNote {
+                note.title = titleTextField.text
+                note.desc = descriptionTextView.text
+                
+                // Always save the context
+                saveContext()
+                navigationController?.popViewController(animated: true)
             }
         }
         
@@ -79,6 +74,22 @@ class NoteDetailVC: UIViewController {
     
     @IBAction func deleteAction(_ sender: Any) {
         
+        let note = returnObject()
+        guard let note = note else {
+            return
+        }
+
+        if note == selectedNote {
+            context.delete(note)
+            saveContext()
+            navigationController?.popViewController(animated: true)
+        }
+    }
+    
+    private func returnObject() -> Note? {
+        
+        var object: Note?
+        
         let request = Note.fetchRequest()
         
         do {
@@ -86,12 +97,18 @@ class NoteDetailVC: UIViewController {
             for result in results {
                 let note = result as! Note
                 // Searching for the correct note to update
-                if note == selectedNote {
-                    context.delete(note)
-                    try context.save()
-                    navigationController?.popViewController(animated: true)
-                }
+                object = note
             }
+        } catch {
+            print(error)
+        }
+        
+        return object
+    }
+    
+    private func saveContext() {
+        do {
+            try context.save()
         } catch {
             print(error)
         }
@@ -108,7 +125,6 @@ class NoteDetailVC: UIViewController {
         DispatchQueue.main.async { [weak self] in
             self?.present(alert, animated: true, completion: nil)
         }
-        
     }
     
 }
