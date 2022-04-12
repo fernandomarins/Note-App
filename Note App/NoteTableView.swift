@@ -26,6 +26,7 @@ class NoteTableView: UITableViewController {
     }
     
     func loadData() {
+        // The NSManagedObject comes with a built-in fetch request method
         let request = Note.fetchRequest()
         do {
             noteList = try context.fetch(request) as! [Note]
@@ -58,10 +59,10 @@ class NoteTableView: UITableViewController {
             let indexPath = tableView.indexPathForSelectedRow!
             let noteDetail = segue.destination as? NoteDetailVC
             
+            // Sending the note to the next view
             let selectedNote: Note!
             selectedNote = noteList[indexPath.row]
             noteDetail?.selectedNote = selectedNote
-            print(indexPath.row)
             
             tableView.deselectRow(at: tableView.indexPathForSelectedRow!, animated: true)
         }
