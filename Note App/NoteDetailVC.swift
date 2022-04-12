@@ -76,6 +76,26 @@ class NoteDetailVC: UIViewController {
         
     }
     
+    
+    @IBAction func deleteAction(_ sender: Any) {
+        let request = Note.fetchRequest()
+        
+        do {
+            let results: NSArray = try context.fetch(request) as NSArray
+            for result in results {
+                let note = result as! Note
+                // Searching for the correct note to update
+                if note == selectedNote {
+                    context.delete(note)
+                    try context.save()
+                    navigationController?.popViewController(animated: true)
+                }
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
     private func setupTapToDismiss() {
         let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing))
         view.addGestureRecognizer(tap)
