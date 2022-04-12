@@ -45,9 +45,6 @@ class NoteTableView: UITableViewController {
         
         return noteCell
     }
-}
-    
-extension NoteTableView {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return noteList.count
@@ -68,17 +65,6 @@ extension NoteTableView {
             noteDetail?.selectedNote = selectedNote
             
             tableView.deselectRow(at: tableView.indexPathForSelectedRow!, animated: true)
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            let commit = noteList[indexPath.row]
-            context.delete(commit)
-            noteList.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-
-            try? context.save()
         }
     }
 
